@@ -37,5 +37,14 @@ variable "image" {
 }
 
 variable "tags" {
+  type        = list(string)
   description = "The GCE instance tags. refered by security module."
+}
+
+variable "ssh_port" {
+  description = "The GCE instance ssh port."
+}
+
+variable "instance_user" {
+  description = "The GCE instance user."
 }

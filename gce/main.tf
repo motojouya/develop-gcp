@@ -1,12 +1,13 @@
 # terraformの設定
 terraform {
-  backend {}
+  required_version = "= 1.4.2"
   required_providers {
     google = {
       source  = "hashicorp/google"
       version = "4.56.0"
     }
   }
+  backend "gcs" {}
 }
 
 # terraformで利用するプロバイダーの設定

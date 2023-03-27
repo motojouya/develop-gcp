@@ -1,8 +1,3 @@
-resource "google_service_account" "developer" {
-  account_id   = var.service_account_id
-  display_name = var.service_account_name
-}
-
 # os loginはdefaultでtrueっぽい
 # 本来はinstanceのmetadataに指定する
 resource "google_compute_instance" "default" {
@@ -28,9 +23,12 @@ resource "google_compute_instance" "default" {
     scopes = ["cloud-platform"]
   }
 
+
+
+
   metadata_startup_script = <<EOF
 #!/bin/bash
-echo 'Run!'
+curl https://raw.githubusercontent.com/motojouya/gce-develop/master/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port}
 EOF
 
   scheduling {
