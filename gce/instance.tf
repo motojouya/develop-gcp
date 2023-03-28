@@ -13,6 +13,10 @@ resource "google_compute_instance" "default" {
     }
   }
 
+  metadata = {
+    enable-oslogin : "TRUE"
+  }
+
   network_interface {
     network = "default"
     access_config {}
@@ -23,12 +27,9 @@ resource "google_compute_instance" "default" {
     scopes = ["cloud-platform"]
   }
 
-
-
-
   metadata_startup_script = <<EOF
 #!/bin/bash
-curl https://raw.githubusercontent.com/motojouya/gce-develop/master/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port}
+curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port}
 EOF
 
   scheduling {

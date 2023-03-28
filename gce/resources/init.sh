@@ -8,6 +8,12 @@ ssh_port=$2
 # start configurations
 cd /home/ubuntu
 
+# ssh config
+curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/sshd_config.tmpl -O
+sed -e s/{%port%}/$ssh_port/g sshd_config.tmpl > sshd_config.init
+cp sshd_config.init /etc/ssh/sshd_config
+systemctl restart sshd
+
 apt-get update
 apt-get install -y jq
 apt-get install -y tmux
@@ -26,12 +32,6 @@ apt-get install -y nvme-cli
 # curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 # apt-get update
 # apt-get install -y google-cloud-sdk
-
-# ssh config
-curl https://raw.githubusercontent.com/motojouya/gce-develop/master/sshd_config.tmpl -O
-sed -e s/{%port%}/$ssh_port/g sshd_config.tmpl > sshd_config.init
-cp sshd_config.init /etc/ssh/sshd_config
-systemctl restart sshd
 
 # # install nodejs
 # apt-get install -y nodejs
