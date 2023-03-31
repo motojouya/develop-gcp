@@ -4,9 +4,14 @@ set -x
 # definitions
 username=$1
 ssh_port=$2
+device=$3
 
 # start configurations
 cd /home/ubuntu
+
+# mount disk
+# mkdir /home/$username
+# mount /dev/$device /home/$username
 
 # ssh config
 curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/sshd_config.tmpl -O
@@ -26,40 +31,28 @@ apt-get install -y silversearcher-ag
 
 apt-get install -y nvme-cli
 
-# # gcloud
-# export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-# echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-# apt-get update
-# apt-get install -y google-cloud-sdk
+apt-get install -y nodejs
+apt-get install -y npm
+npm install --global yarn
+npm install -g npx
+npm install -g typescript typescript-language-server
 
-# # install nodejs
-# apt-get install -y nodejs
-# apt-get install -y npm
-# 
-# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-# echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-# apt-get update
-# apt-get install -y yarn
-# npm install -g npx
-# npm install -g typescript typescript-language-server
+# install docker
+apt-get install \
+    ca-certificates \
+    curl \
+    gnupg
+mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# # install docker
-# apt-get install -y \
-#     apt-transport-https \
-#     ca-certificates \
-#     curl \
-#     gnupg-agent \
-#     software-properties-common
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-# apt-key fingerprint 0EBFCD88
-# add-apt-repository \
-#    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-#    $(lsb_release -cs) \
-#    stable"
-# apt-get update
-# apt-get install -y docker-ce docker-ce-cli containerd.io
-# 
+# まだこれ書いてない https://docs.docker.com/engine/install/linux-postinstall/
+
 # curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 # chmod +x /usr/local/bin/docker-compose
 # 

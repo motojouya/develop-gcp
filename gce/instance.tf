@@ -13,6 +13,11 @@ resource "google_compute_instance" "default" {
     }
   }
 
+  attached_disk {
+    source      = "projects/${var.project_id}/zones/${var.zone}/disks/${var.disk_name}"
+    device_name = var.disk_name
+  }
+
   metadata = {
     enable-oslogin : "TRUE"
   }
@@ -29,7 +34,7 @@ resource "google_compute_instance" "default" {
 
   metadata_startup_script = <<EOF
 #!/bin/bash
-curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port}
+curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port} ${var.device}
 EOF
 
   scheduling {

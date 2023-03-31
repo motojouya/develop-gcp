@@ -48,3 +48,11 @@ variable "ssh_port" {
 variable "instance_user" {
   description = "The GCE instance user."
 }
+
+variable "device" {
+  description = "attached disk device name."
+}
+
+variable "disk_name" {
+  description = "attached disk name."
+}
