@@ -10,8 +10,8 @@ device=$3
 cd /home/ubuntu
 
 # mount disk
-# mkdir /home/$username
-# mount /dev/$device /home/$username
+mkdir /home/$username
+mount /dev/$device /home/$username
 
 # ssh config
 curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/sshd_config.tmpl -O
