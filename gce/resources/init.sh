@@ -38,7 +38,7 @@ npm install -g npx
 npm install -g typescript typescript-language-server
 
 # install docker
-apt-get install \
+apt-get install -y \
     ca-certificates \
     curl \
     gnupg
@@ -49,15 +49,13 @@ echo \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
-apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# まだこれ書いてない https://docs.docker.com/engine/install/linux-postinstall/
+gpasswd -a $username docker
+systemctl restart docker
 
 # curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 # chmod +x /usr/local/bin/docker-compose
-# 
-# gpasswd -a $username docker
-# systemctl restart docker
 
 # # others
 # /home/$username/.fzf/install --bin
