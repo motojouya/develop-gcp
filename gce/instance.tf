@@ -34,7 +34,7 @@ resource "google_compute_instance" "default" {
 
   metadata_startup_script = <<EOF
 #!/bin/bash
-curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port} ${var.device}
+curl https://raw.githubusercontent.com/motojouya/develop-gcp/main/gce/resources/init.sh | bash -s -- ${var.instance_user} ${var.ssh_port} ${var.device} ${var.rdp_port}
 EOF
 
   scheduling {

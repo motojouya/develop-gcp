@@ -5,6 +5,7 @@ set -x
 username=$1
 ssh_port=$2
 device=$3
+rdp_port=$4
 
 # start configurations
 cd /home/ubuntu

@@ -41,6 +41,10 @@ variable "tags" {
   description = "The GCE instance tags. refered by security module."
 }
 
+variable "rdp_port" {
+  description = "The GCE instance rdp port."
+}
+
 variable "ssh_port" {
   description = "The GCE instance ssh port."
 }
