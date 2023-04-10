@@ -12,20 +12,20 @@ on:
         default: false
 
 env:
-  TF_VAR_PROJECT_ID          : ${{ vars.project_id }}
-  TF_VAR_REGION              : ${{ vars.region }}
-  TF_VAR_ZONE                : ${{ vars.zone }}
-  TF_VAR_SERVICE_ACCOUNT_ID  : ${{ vars.service_account_id }}
-  TF_VAR_SERVICE_ACCOUNT_NAME: ${{ vars.service_account_name }}
-  TF_VAR_INSTANCE_NAME       : ${{ vars.instance_name }}
-  TF_VAR_MACHINE_TYPE        : ${{ vars.machine_type }}
-  TF_VAR_IMAGE               : ${{ vars.image }}
-  TF_VAR_TAGS                : ${{ vars.tags }}
-  TF_VAR_RDP_PORT            : ${{ vars.rdp_port }}
-  TF_VAR_SSH_PORT            : ${{ vars.ssh_port }}
-  TF_VAR_INSTANCE_USER       : ${{ vars.instance_user }}
-  TF_VAR_DEVICE              : ${{ vars.device }}
-  TF_VAR_DISK_NAME           : ${{ vars.disk_name }}
+  TF_VAR_project_id          : ${{ vars.project_id }}
+  TF_VAR_region              : ${{ vars.region }}
+  TF_VAR_zone                : ${{ vars.zone }}
+  TF_VAR_service_account_id  : ${{ vars.service_account_id }}
+  TF_VAR_service_account_name: ${{ vars.service_account_name }}
+  TF_VAR_instance_name       : ${{ vars.instance_name }}
+  TF_VAR_machine_type        : ${{ vars.machine_type }}
+  TF_VAR_image               : ${{ vars.image }}
+  TF_VAR_tags                : ${{ vars.tags }}
+  TF_VAR_rdp_port            : ${{ vars.rdp_port }}
+  TF_VAR_ssh_port            : ${{ vars.ssh_port }}
+  TF_VAR_instance_user       : ${{ vars.instance_user }}
+  TF_VAR_device              : ${{ vars.device }}
+  TF_VAR_disk_name           : ${{ vars.disk_name }}
   TF_BUCKET_NAME             : ${{ vars.bucket_name }}
   TF_BUCKET_PREFIX           : ${{ vars.bucket_prefix }}
 
