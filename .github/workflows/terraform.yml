@@ -1,0 +1,82 @@
+name: Terraform
+
+on:
+  schedule:
+    - cron:  '30 8 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        description: 'Dry Run!'
+        required: true
+        type: boolean
+        default: false
+
+env:
+  TF_VAR_PROJECT_ID          : ${{ vars.project_id }}
+  TF_VAR_REGION              : ${{ vars.region }}
+  TF_VAR_ZONE                : ${{ vars.zone }}
+  TF_VAR_SERVICE_ACCOUNT_ID  : ${{ vars.service_account_id }}
+  TF_VAR_SERVICE_ACCOUNT_NAME: ${{ vars.service_account_name }}
+  TF_VAR_INSTANCE_NAME       : ${{ vars.instance_name }}
+  TF_VAR_MACHINE_TYPE        : ${{ vars.machine_type }}
+  TF_VAR_IMAGE               : ${{ vars.image }}
+  TF_VAR_TAGS                : ${{ vars.tags }}
+  TF_VAR_RDP_PORT            : ${{ vars.rdp_port }}
+  TF_VAR_SSH_PORT            : ${{ vars.ssh_port }}
+  TF_VAR_INSTANCE_USER       : ${{ vars.instance_user }}
+  TF_VAR_DEVICE              : ${{ vars.device }}
+  TF_VAR_DISK_NAME           : ${{ vars.disk_name }}
+  TF_BUCKET_NAME             : ${{ vars.bucket_name }}
+  TF_BUCKET_PREFIX           : ${{ vars.bucket_prefix }}
+
+# 作業ディレクトリの指定
+defaults:
+  run:
+    working-directory: ./gce/
+
+jobs:
+  create_gce:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.2
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=$TF_BUCKET_NAME" -backend-config="prefix=$TF_BUCKET_PREFIX"
+
+      - name: Terraform Validate
+        run: terraform validate -backend-config="bucket=$TF_BUCKET_NAME" -backend-config="prefix=$TF_BUCKET_PREFIX"
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -backend-config="bucket=$TF_BUCKET_NAME" -backend-config="prefix=$TF_BUCKET_PREFIX"
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.dryrun))
+        run: terraform apply -auto-approve -input=false -backend-config="bucket=$TF_BUCKET_NAME" -backend-config="prefix=$TF_BUCKET_PREFIX"
+
