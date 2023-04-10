@@ -1,15 +1,15 @@
 name: Terraform
 
 on:
-  # schedule:
-  #   - cron:  '30 8 * * 1-5'
+  schedule:
+    - cron:  '30 8 * * 1-5'
+    - cron:  '30 10 * * 1-5'
   workflow_dispatch:
     inputs:
-      dryrun:
-        description: 'Dry Run!'
+      do_apply:
+        description: 'apply? or not(destroy)'
         required: true
         type: boolean
-        default: false
 
 env:
   TF_VAR_project_id          : ${{ vars.project_id }}
@@ -67,16 +67,20 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      # - name: Terraform Plan
-      # - id: plan
-      # - run: terraform plan -no-color -lock-timeout=60m
-      # continue-on-error: true
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -lock-timeout=60m
+        continue-on-error: true
 
-      # - name: Terraform Plan Status
-      # - if: steps.plan.outcome == 'failure'
-      # - run: exit 1
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
       - name: Terraform Apply
-        # if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.dryrun))
+        if: github.ref == 'refs/heads/main' && ((github.event_name == 'schedule' && github.event.schedule == '30 8 * * 1-5') || (github.event_name == 'workflow_dispatch' && inputs.do_apply))
         run: terraform apply -auto-approve -input=false
+
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/main' && ((github.event_name == 'schedule' && github.event.schedule == '30 10 * * 1-5') || (github.event_name == 'workflow_dispatch' && !inputs.do_apply))
+        run: terraform destroy -auto-approve -input=false
 
