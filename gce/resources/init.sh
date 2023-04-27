@@ -32,8 +32,9 @@ apt-get install -y silversearcher-ag
 
 apt-get install -y nvme-cli
 
-apt-get install -y nodejs
-apt-get install -y npm
+# apt-get install -y nodejs
+# apt-get install -y npm
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs
 npm install --global yarn
 npm install -g npx
 npm install -g typescript typescript-language-server
