@@ -26,8 +26,8 @@ apt-get install -y tmux
 apt-get install -y tree
 apt-get install -y xauth
 
-apt-add-repository -y ppa:mizuno-as/silversearcher-ag
-apt-get update -y
+# apt-add-repository -y ppa:mizuno-as/silversearcher-ag
+# apt-get update -y
 apt-get install -y silversearcher-ag
 
 apt-get install -y nvme-cli
